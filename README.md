@@ -1,15 +1,33 @@
 # Kanap #
 
-This is the front end and back end server for Project 5 of the Web Developer path.
+Bienvenu sur ce 5ème projet de ma formation centré sur une première approche de JavaScript. La base du site a déjà été réalisé. Ma mission a été de réaliser l'affichage des canapés ainsi que l'ensemble des fonctionalités attendues uniquement avec JS. 
 
-### Back end Prerequisites ###
 
-You will need to have Node and `npm` installed locally on your machine.
+Pour démarrer :
+1- Cloner le repository
 
-### Back end Installation ###
+2- Si les pluggins ne sont pas installés, avec un terminal veuillez vous rendre au dossier racine et installer les pluggins (npm install)
 
-Clone this repo. From the "back" folder of the project, run `npm install`. You 
-can then run the server with `node server`. 
-The server should run on `localhost` with default port `3000`. If the
-server runs on another port for any reason, this is printed to the
-console when the server starts, e.g. `Listening on port 3001`.
+3- Avec un terminal veuillez vous rendre dans le dossier back et taper "npm start". Le port sollicité est le port 3000
+
+4- Ouvrir la page index comme avec le pluggin "open live server" de VsCode
+
+
+Fonctionalités :
+* Affichage de l'ensemble des canapés de l'API référencés en page Index
+
+* Au clic sur un canapé sa fiche produit appraît. Vous pouvez choisir une couleur et une quantité puis l'ajouter au panier. Ajouter autant de produits que vous souhaitez
+
+* Possibilité d'accéder au panier pour voir l'ensemble des produits choisis. Vous pouvez à ce stade modifier la quantité. Il vous faudra remplir un formulaire en respectant les consignes du site avant de pouvoir commander.
+
+* Je vous laisse la surprise de découvrir ce qui se passe lorsque vous faîtes une commande
+
+
+Compétences évaluées
+* Interagir avec un web service avec JavaScript
+
+* Valider des données issues de sources externes
+
+* Créer un plan de test pour une application
+
+* Gérer des événements JavaScript
