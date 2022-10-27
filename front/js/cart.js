@@ -1,4 +1,4 @@
-// On récupère les informations dans le localStorage
+// Nous récupérons les informations dans le localStorage
 let panier = JSON.parse(localStorage.getItem("produit"));
 
 
@@ -9,22 +9,19 @@ if (panier) {
     await panier;
 }
 
-//Nous récupérons les informations de l'API afin de définir le prix du produit en fonction de l'APi et pas du localStorage
+//Nous récupérons les informations de l'API 
   await fetch(`http://localhost:3000/api/products/`)
   .then((rep) => rep.json())
   .then((promise) => {
       canapProduit = promise;
   }) 
 
-
-//Le prix dans le localStorage correspondra toujours au prix dans l'API, par mesure de sécurité
+//Nous prennons toutes les informations utiles depuis le localStorage sauf le prix qui provient de l'API
 canapProduit.forEach((variable) => {
-  for(let i in panier){
+  for(let i in panier) {
     if(panier[i]._id == variable._id)
     { 
-      panier[i].price = variable.price,
-    
-      
+     
 cart__items.innerHTML = panier.map((produit) => `
 <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
                 <div class="cart__item__img">
@@ -34,13 +31,14 @@ cart__items.innerHTML = panier.map((produit) => `
                   <div class="cart__item__content__description">
                     <h2>${produit.name}</h2>
                     <p>Couleur : ${produit.couleur}</p>
-                    <span class= ".cart__price .cart__price p" id= "prix" data-price="${produit.price}" data-quatite="${produit.quantite}" > ${produit.price} € </span>
+                    <span class= ".cart__price .cart__price p" id= "prix" data-price="${variable.price}" data-quatite="${produit.quantite}" > ${variable.price} € </span>
                   </div> <br/>
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity"> 
                       <p>Qté : </p>
                         <input type="number" class="itemQuantity" name="itemQuantity" id="nombrearticles" min="1" max="100" value="${produit.quantite}" data-color="${produit.couleur}" data-id="${produit._id}"> </input>
                         </div>
+                    <div class= "cart__item__content__validate">
                     <div class="cart__item__content__settings__delete">
                    
                       <p class="deleteItem" data-id="${produit._id}" data-color="${produit.couleur}" >Supprimer</p>
@@ -60,46 +58,28 @@ cart__items.innerHTML = panier.map((produit) => `
 AFFICHAGEPANIER();
 
 
-
-
-//Modification des éléments du panier de manière dynamique
-const MODIFQUANTITE  = async () => {
-  await AFFICHAGEPANIER;
+// Modification des quantités de manière dynamique
+function MODIFQUANTITE() {
   const SELECTITEM = document.querySelectorAll(".itemQuantity");
 
-  SELECTITEM.forEach((MODIFITEM) => {  
-    MODIFITEM.addEventListener("change", () => {
-    let panier = JSON.parse(localStorage.getItem("produit"));  
+  for (let i = 0; i < SELECTITEM.length; i++){
+      SELECTITEM[i].addEventListener("change" , (event) => {
+          event.preventDefault();
 
-//On utilise cette boucle pour récupérer l'ID et le couleur sur le bouton selectionné
-    for ( let i in panier ){
-      if (
-        panier[i]._id == MODIFITEM.dataset.id &&
-        panier[i].couleur == MODIFITEM.dataset.color 
-      ) 
-      return(
-        panier[i].quantite = MODIFITEM.value,
-        localStorage.setItem("produit", JSON.stringify(panier))     
-      )};
-      return JSON.parse(localStorage.getItem("produit"))
-    }); 
-  }); 
+          //Selection de l'element à modifier en fonction de son id ET sa couleur
+          let quantityModif = panier[i].quantite;
+          let SELECTITEMValue = SELECTITEM[i].valueAsNumber;
+          
+          let quantiteFind = panier.find((el) => el.SELECTITEMValue !== quantityModif);
 
-  //Nous créons une balise qui permettra de refresh la page afin de valider les quantités et de mettre le prix total à jour
-  let nvxboutton = document.createElement("p");
-  let t = document.createTextNode("Cliquer pour valider les quantités");
-  nvxboutton.appendChild(t);
-  let emplbtn = document.querySelector(".cart__price");
-  emplbtn.appendChild(nvxboutton);
-  nvxboutton.style.fontSize = "18px";
-  nvxboutton.style.fontWeight = "bold";
-  nvxboutton.style.cursor = "pointer";
-  
-  nvxboutton.addEventListener("click", () =>{
-    window.location.href="cart.html"
-  })
-};
+          quantiteFind.quantite = SELECTITEMValue;
+          panier[i].quantite = quantiteFind.quantite;
 
+          localStorage.setItem("produit", JSON.stringify(panier));
+          location.reload();
+      })
+  }
+}
 
 
 //Fonction pour supprimer un produit dans le panier
@@ -117,7 +97,7 @@ if (
 )
 return (
   localStorage.removeItem("produit"),
-  window.location.href="cart.html"
+  location.reload()
 );
 
 else {
@@ -386,8 +366,7 @@ const PAQUET = () => {
       email: contactRef.email,
     },
     products: panierID
-  };
-   
+  }; 
 }};
 
 
@@ -407,13 +386,8 @@ const ENVOISERVEUR = async () => {
 
 .then((rep) => rep.json())
 .then((promise) => {
-  console.log(promise.orderId);
   window.location.href = `confirmation.html?Id_commande=${promise.orderId}`;
 })
 };
 
 ENVOISERVEUR();
-
-
-
-
