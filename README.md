@@ -4,6 +4,7 @@ Bienvenu sur ce 5ème projet de ma formation centré sur une première approche 
 
 
 Pour démarrer :
+
 1- Cloner le repository
 
 2- Si les pluggins ne sont pas installés, avec un terminal veuillez vous rendre au dossier racine et installer les pluggins (npm install)
@@ -12,7 +13,7 @@ Pour démarrer :
 
 4- Ouvrir la page index comme avec le pluggin "open live server" de VsCode
 
-5- Ouvrir la page index avec votre éditeur tel que "open live server" de VsCode. Si aucun produit n'apparaît, veuillez réaliser l'étape 2
+5- Si aucun produit n'apparaît, veuillez réaliser l'étape 2
 
 
 Fonctionalités :
