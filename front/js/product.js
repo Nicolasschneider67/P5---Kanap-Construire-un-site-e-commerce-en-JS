@@ -1,10 +1,8 @@
 //Récupération de l'ID dans l'URL
 let recuperation_id_url = window.location.search;
 const URLFINALE = new URLSearchParams(recuperation_id_url);
-console.log(URLFINALE)
 //On utiliser la méthode split pour ne garder que l'ID (ce qu'il y a entre parenthèses) afin que l'API puisse nous restituer le produit
 const ID = URLFINALE.get("id").split("=").join("");
-console.log(ID)
 
 
 let canapProduit =[]
@@ -74,6 +72,7 @@ const AJOUT_PANIER = () => {
 const CHOIXCANAP = Object.assign({}, canapProduit, {
     couleur : `${selectionCouleur.value}`,
     quantite : Number(`${option_quantite.value}`),
+    price : "",
 });
 
 
