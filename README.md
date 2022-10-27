@@ -12,6 +12,8 @@ Pour démarrer :
 
 4- Ouvrir la page index comme avec le pluggin "open live server" de VsCode
 
+5- Ouvrir la page index avec votre éditeur tel que "open live server" de VsCode. Si aucun produit n'apparaît, veuillez réaliser l'étape 2
+
 
 Fonctionalités :
 * Affichage de l'ensemble des canapés de l'API référencés en page Index
