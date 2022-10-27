@@ -20,33 +20,92 @@ if (panier) {
 canapProduit.forEach((variable) => {
   for(let i in panier) {
     if(panier[i]._id == variable._id)
-    { 
-     
-cart__items.innerHTML = panier.map((produit) => `
-<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
-                <div class="cart__item__img">
-                  <img src="${produit.imageUrl}" alt="${produit.altTxt}">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>${produit.name}</h2>
-                    <p>Couleur : ${produit.couleur}</p>
-                    <span class= ".cart__price .cart__price p" id= "prix" data-price="${variable.price}" data-quatite="${produit.quantite}" > ${variable.price} € </span>
-                  </div> <br/>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity"> 
-                      <p>Qté : </p>
-                        <input type="number" class="itemQuantity" name="itemQuantity" id="nombrearticles" min="1" max="100" value="${produit.quantite}" data-color="${produit.couleur}" data-id="${produit._id}"> </input>
-                        </div>
-                    <div class= "cart__item__content__validate">
-                    <div class="cart__item__content__settings__delete">
-                   
-                      <p class="deleteItem" data-id="${produit._id}" data-color="${produit.couleur}" >Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-`).join(""); 
+    {
+      
+// Insertion de l'élément "article"
+let productArticle = document.createElement("article");
+document.querySelector("#cart__items").appendChild(productArticle);
+productArticle.className = "cart__item";
+productArticle.setAttribute('data-id', panier[i].idProduit);
+
+ // Insertion de l'élément "div"
+ let productDivImg = document.createElement("div");
+ productArticle.appendChild(productDivImg);
+ productDivImg.className = "cart__item__img";
+
+// Insertion de l'image
+let productImg = document.createElement("img");
+productDivImg.appendChild(productImg);
+productImg.src = panier[i].imageUrl;
+productImg.alt = panier[i].altTxt;
+
+// Insertion de l'élément "div"
+let productItemContent = document.createElement("div");
+productArticle.appendChild(productItemContent);
+productItemContent.className = "cart__item__content";
+
+// Insertion de l'élément "div"
+let productItemContentTitlePrice = document.createElement("div");
+productItemContent.appendChild(productItemContentTitlePrice);
+productItemContentTitlePrice.className = "cart__item__content__titlePrice";
+
+// Insertion du titre h2
+let productTitle = document.createElement("h2");
+productItemContentTitlePrice.appendChild(productTitle);
+productTitle.innerHTML = panier[i].name;
+
+// Insertion de la couleur
+let productColor = document.createElement("p");
+productTitle.appendChild(productColor);
+productColor.innerHTML = panier[i].couleur;
+productColor.style.fontSize = "20px";
+
+// Insertion du prix
+let productPrice = document.createElement("p");
+productItemContentTitlePrice.appendChild(productPrice);
+productPrice.innerHTML = variable.price + " €";
+
+// Insertion de l'élément "div"
+let productItemContentSettings = document.createElement("div");
+productItemContent.appendChild(productItemContentSettings);
+productItemContentSettings.className = "cart__item__content__settings";
+
+// Insertion de l'élément "div"
+let productItemContentSettingsQuantity = document.createElement("div");
+productItemContentSettings.appendChild(productItemContentSettingsQuantity);
+productItemContentSettingsQuantity.className = "cart__item__content__settings__quantity";
+
+// Insertion de "Qté : "
+let productQte = document.createElement("p");
+productItemContentSettingsQuantity.appendChild(productQte);
+productQte.innerHTML = "Qté : ";
+
+// Insertion de la quantité
+let productQuantity = document.createElement("input");
+productItemContentSettingsQuantity.appendChild(productQuantity);
+productQuantity.value = panier[i].quantite;
+productQuantity.className = "itemQuantity";
+productQuantity.setAttribute("type", "number");
+productQuantity.setAttribute("min", "1");
+productQuantity.setAttribute("max", "100");
+productQuantity.setAttribute("name", "itemQuantity");
+productQuantity.setAttribute("data-value", panier[i].quantite);
+productQuantity.setAttribute("data-id", panier[i]._id);
+productQuantity.setAttribute("data-color", panier[i].couleur);
+productQuantity.setAttribute("data-price", variable.price)
+
+// Insertion de l'élément "div"
+let productItemContentSettingsDelete = document.createElement("div");
+productItemContentSettings.appendChild(productItemContentSettingsDelete);
+productItemContentSettingsDelete.className = "cart__item__content__settings__delete";
+
+// Insertion de "p" supprimer
+let productSupprimer = document.createElement("p");
+productItemContentSettingsDelete.appendChild(productSupprimer);
+productSupprimer.className = "deleteItem";
+productSupprimer.innerHTML = "Supprimer";
+productSupprimer.setAttribute("data-id", panier[i]._id);
+productSupprimer.setAttribute("data-color", panier[i].couleur);
 };     
     };
     
@@ -61,26 +120,21 @@ AFFICHAGEPANIER();
 // Modification des quantités de manière dynamique
 function MODIFQUANTITE() {
   const SELECTITEM = document.querySelectorAll(".itemQuantity");
-
-  for (let i = 0; i < SELECTITEM.length; i++){
-      SELECTITEM[i].addEventListener("change" , (event) => {
-          event.preventDefault();
-
-          //Selection de l'element à modifier en fonction de son id ET sa couleur
-          let quantityModif = panier[i].quantite;
-          let SELECTITEMValue = SELECTITEM[i].valueAsNumber;
-          
-          let quantiteFind = panier.find((el) => el.SELECTITEMValue !== quantityModif);
-
-          quantiteFind.quantite = SELECTITEMValue;
-          panier[i].quantite = quantiteFind.quantite;
-
-          localStorage.setItem("produit", JSON.stringify(panier));
-          location.reload();
-      })
-  }
-}
-
+  
+  SELECTITEM.forEach((kanap) => {
+    kanap.addEventListener("change", (e) => {
+    e.preventDefault();
+      
+      for (i in panier){
+        if (panier[i]._id == kanap.dataset.id && panier[i].couleur == kanap.dataset.color) {
+          return panier[i].quantite = kanap.value,
+                 localStorage.setItem("produit", JSON.stringify(panier)),
+                 location.reload();
+        }
+      };
+    })
+  })
+};
 
 //Fonction pour supprimer un produit dans le panier
 const SUPPRIMERPANIER = async () => {
@@ -133,13 +187,12 @@ let prixTotal = 0;
  {totalArticle += JSON.parse(article.quantite);}
 
 //On utilise une boucle pour restituer chaque prix de chaque produit en fonction de sa quantité
-let recherchePrix = document.querySelectorAll("#prix")
+let recherchePrix = document.querySelectorAll(".itemQuantity")
 recherchePrix.forEach((cart) => {
-  prixArticle = Number(cart.dataset.price)
-  quantiteParArticle = Number(cart.dataset.quatite)
-  prixParArticle = prixArticle *= quantiteParArticle
- 
-  prixTotal += prixParArticle
+  prixArticle = cart.dataset.price;
+  quantiteParArticle = Number(cart.dataset.value);
+  prixParArticle = prixArticle *= quantiteParArticle;
+  prixTotal += prixParArticle;
 })
 
   
